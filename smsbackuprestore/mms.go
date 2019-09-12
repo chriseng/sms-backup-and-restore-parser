@@ -30,6 +30,7 @@ import (
 	"strings"
 	"fmt"
 	"strconv"
+	"time"
 )
 
 // DecodeImages identifies base64-encoded images in backed-up MMS messages and decodes them and outputs them to files
@@ -43,10 +44,13 @@ func DecodeImages(m *Messages, mainOutputDir string) (numImagesIdentified, numIm
 	os.MkdirAll(outputDir, os.ModePerm)
 
 	for mmsIndex, mms := range m.MMS {
+		t := time.Unix(int64(mms.Date) / int64(1000), 0)
+		fnPrefix := t.Format("2006-01-02-150405")
+		
 		for partIndex, part := range mms.Parts {
 			if strings.Contains(part.ContentType, "image/") {
 				numImagesIdentified++
-				outputImgFilename := part.ImageFileName(mmsIndex, partIndex)
+				outputImgFilename := fnPrefix + "-" + part.ImageFileName(mmsIndex, partIndex)
 
 				// decode base64 image string as byte slice and write decoded byte slice to file
 				outputPath := filepath.Join(outputDir, outputImgFilename)
@@ -149,7 +153,7 @@ func GenerateMMSOutput(m *Messages, outputDir string) error {
 				strconv.Itoa(partIndex),
 				mms.TextOnly.String(),
 				mms.Read.String(),
-				mms.Date.String(),
+				strconv.Itoa(mms.Date),
 				mms.Locked.String(),
 				mms.DateSent.String(),
 				mms.ReadableDate,
