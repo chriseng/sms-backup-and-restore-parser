@@ -32,7 +32,7 @@ import (
 	"os"
 	"io/ioutil"
 	"encoding/xml"
-	"../../smsbackuprestore"
+	"github.com/chriseng/sms-backup-and-restore-parser/smsbackuprestore"
 	"time"
 	"path/filepath"
 	"strings"
