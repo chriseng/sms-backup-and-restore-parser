@@ -48,7 +48,7 @@ func DecodeImages(m *Messages, mainOutputDir string) (numImagesIdentified, numIm
 		fnPrefix := t.Format("2006-01-02-150405")
 		
 		for partIndex, part := range mms.Parts {
-			if strings.Contains(part.ContentType, "image/") {
+			if (strings.Contains(part.ContentType, "image/")) || (strings.Contains(part.ContentType, "video/")) {
 				numImagesIdentified++
 				outputImgFilename := fnPrefix + "-" + part.ImageFileName(mmsIndex, partIndex)
 
